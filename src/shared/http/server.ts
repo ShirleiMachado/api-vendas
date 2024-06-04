@@ -4,8 +4,7 @@ import 'express-async-errors';
 import cors from 'cors';
 import routes from './routes';
 import AppError from '@shared/errors/AppError';
-import '@shared/typeorm';
-
+import '@shared/typeorm'; // Certifique-se de que a conexão com o banco de dados é estabelecida
 
 const app = express();
 
@@ -22,13 +21,14 @@ app.use(
         message: error.message,
       });
     }
+    console.error(error);
     return response.status(500).json({
       status: 'error',
-      message: 'erro interno no servidor',
+      message: 'Erro interno no servidor',
     });
   },
 );
 
 app.listen(3333, () => {
-  console.log('Servidor rodando na porta 3333!🏆 ');
+  console.log('Servidor rodando na porta 3333!🏆');
 });

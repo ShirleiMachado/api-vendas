@@ -2,9 +2,11 @@ import 'reflect-metadata';
 import express, { NextFunction, Request, Response } from 'express';
 import 'express-async-errors';
 import cors from 'cors';
+import { errors} from "celebrate";
 import routes from './routes';
 import AppError from '@shared/errors/AppError';
 import '@shared/typeorm'; // Certifique-se de que a conexão com o banco de dados é estabelecida
+import { celebrate } from 'celebrate';
 
 const app = express();
 
@@ -12,6 +14,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use(routes);
+
+app.use(errors());
 
 app.use(
   (error: Error, request: Request, response: Response, next: NextFunction) => {

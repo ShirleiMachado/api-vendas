@@ -1,9 +1,10 @@
 import AppError from '@shared/errors/AppError';
+import { compare } from 'bcryptjs';
+import { sign } from 'jsonwebtoken';
+import authConfig from '@config/auth';
 import { getCustomRepository } from 'typeorm';
 import UsersRepository from '../typeorm/repositories/UsersRepository';
 import User from '../typeorm/entities/User';
-import { compare } from 'bcryptjs';
-import { sign } from 'jsonwebtoken';
 
 interface IRequest {
   email: string;
@@ -29,9 +30,9 @@ class CreateSessionsService {
       throw new AppError('Email ou senha errado', 401);
     }
 
-    const token = sign({}, 'ed44c5c82150ba35c634d7fda4ac79b0', {
+    const token = sign({}, authConfig.jwt.secret, {
       subject: user.id,
-      expiresIn: '1d',
+      expiresIn: authConfig.jwt.expiresIn,
     });
 
     return { user, token };
